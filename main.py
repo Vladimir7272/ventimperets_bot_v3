@@ -1,4 +1,3 @@
-
 from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters
 import random
@@ -64,9 +63,7 @@ async def handle_choice(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user["active_task"] = task
         keyboard = [["🔧 Установить систему"]]
         await update.message.reply_text(
-            f"🛠️ Новый объект: *{task}*
-
-Нажми кнопку, чтобы установить вентиляцию!",
+            f"🛠️ Новый объект: *{task}*\n\nНажми кнопку, чтобы установить вентиляцию!",
             reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True),
             parse_mode="Markdown"
         )
@@ -102,36 +99,26 @@ async def handle_choice(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user["active_task"] = None
         keyboard = [["🚧 Взять заказ", "🔥 Срочный вызов"], ["📊 Профиль", "🛒 Магазин"], ["🏆 Рейтинг"]]
         await update.message.reply_text(
-            f"✅ Установка завершена! +{gained_xp} XP, +10 КлиматКоинов
-💬 {humor}",
+            f"✅ Установка завершена! +{gained_xp} XP, +10 КлиматКоинов\n💬 {humor}",
             reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
         )
 
     elif text == "📊 Профиль":
         await update.message.reply_text(
-            f"📊 Профиль:
-"
-            f"🔹 Уровень: {user['level']}
-"
-            f"🔧 Заказов: {user['orders']}
-"
-            f"💰 КлиматКоины: {user['coins']}
-"
-            f"⭐ XP: {user['xp']}
-"
-            f"🧰 Инструменты: {', '.join(user['tools']) if user['tools'] else 'нет'}
-"
+            f"📊 Профиль:\n"
+            f"🔹 Уровень: {user['level']}\n"
+            f"🔧 Заказов: {user['orders']}\n"
+            f"💰 КлиматКоины: {user['coins']}\n"
+            f"⭐ XP: {user['xp']}\n"
+            f"🧰 Инструменты: {', '.join(user['tools']) if user['tools'] else 'нет'}\n"
             f"🚶 Спасено людей: {user['orders'] * 3}"
         )
 
     elif text == "🛒 Магазин":
-        message = "🛒 Магазин инструментов:
-"
+        message = "🛒 Магазин инструментов:\n"
         for tool, data in TOOLS.items():
-            message += f"{tool} — {data['cost']} коинов ({data['bonus']})
-"
-        message += "
-Напиши название инструмента, чтобы купить."
+            message += f"{tool} — {data['cost']} коинов ({data['bonus']})\n"
+        message += "\nНапиши название инструмента, чтобы купить."
         await update.message.reply_text(message)
 
     elif text in TOOLS:
@@ -147,11 +134,9 @@ async def handle_choice(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif text == "🏆 Рейтинг":
         top = sorted(user_states.items(), key=lambda x: x[1]['xp'], reverse=True)[:5]
-        msg = "🏆 ТОП монтажников:
-"
+        msg = "🏆 ТОП монтажников:\n"
         for i, (uid, udata) in enumerate(top, 1):
-            msg += f"{i}. ID {uid} — {udata['xp']} XP
-"
+            msg += f"{i}. ID {uid} — {udata['xp']} XP\n"
         await update.message.reply_text(msg)
 
     else:
